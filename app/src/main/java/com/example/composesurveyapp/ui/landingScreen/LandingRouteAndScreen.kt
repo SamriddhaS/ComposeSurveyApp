@@ -1,6 +1,7 @@
 package com.example.composesurveyapp.ui.landingScreen
 
 import android.content.res.Configuration
+import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composesurveyapp.R
 import com.example.composesurveyapp.ui.theme.ComposeSurveyAppTheme
+import com.example.composesurveyapp.ui.theme.stronglyDeemphasizedAlpha
 import com.example.composesurveyapp.util.supportWideScreen
 
 @Composable
@@ -70,8 +72,47 @@ fun LandingScreenDesign(
 
             }
 
+            LandingScreenBottomSection(
+                onSignIn,
+                onSignInAsGuest,
+                onFocusChanged = { focoused -> showAppLogoSection = !focoused },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            )
+
         }
     }
+    
+}
+
+@Composable
+fun LandingScreenBottomSection(
+    onSignIn: () -> Unit,
+    onSignInAsGuest: () -> Unit,
+    onFocusChanged: (Boolean) -> Unit,
+    modifier: Modifier
+) {
+
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = "Sign in or continue as guest",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = stronglyDeemphasizedAlpha),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 62.dp, bottom = 12.dp)
+        )
+
+        
+
+
+    }
+
+
+}
+
+@Composable
+fun Email(modifier: Modifier = Modifier) {
     
 }
 
