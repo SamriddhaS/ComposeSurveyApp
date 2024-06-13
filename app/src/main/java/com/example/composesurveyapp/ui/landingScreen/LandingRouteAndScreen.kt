@@ -1,7 +1,6 @@
 package com.example.composesurveyapp.ui.landingScreen
 
 import android.content.res.Configuration
-import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -9,22 +8,28 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,7 +54,7 @@ fun LandingScreenRoute(
 
 @Composable
 fun LandingScreenDesign(
-    onSignIn:()->Unit,
+    onSignIn:(String)->Unit,
     onSignInAsGuest:()->Unit
     ) {
 
@@ -88,11 +93,15 @@ fun LandingScreenDesign(
 
 @Composable
 fun LandingScreenBottomSection(
-    onSignIn: () -> Unit,
+    onSignIn: (email: String) -> Unit,
     onSignInAsGuest: () -> Unit,
     onFocusChanged: (Boolean) -> Unit,
     modifier: Modifier
 ) {
+
+    val emailState by rememberSaveable(stateSaver = EmailStateSaver) {
+        mutableStateOf(EmailState())
+    }
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
@@ -103,7 +112,18 @@ fun LandingScreenBottomSection(
             modifier = Modifier.padding(top = 62.dp, bottom = 12.dp)
         )
 
-        
+        onFocusChanged(emailState.isFocused)
+
+        val onSubmit = {
+            if (emailState.isValid){
+                onSignIn(emailState.text)
+            }else{
+                emailState.enableShowErrors()
+            }
+        }
+
+        Email(emailState, imeAction = ImeAction.Done, onImeAction = onSubmit)
+
 
 
     }
@@ -112,8 +132,39 @@ fun LandingScreenBottomSection(
 }
 
 @Composable
-fun Email(modifier: Modifier = Modifier) {
-    
+fun Email(
+    textFieldState: TextFieldState = remember { EmailState() },
+    imeAction: ImeAction = ImeAction.Next,
+    onImeAction:()->Unit = {}
+    ) {
+
+    OutlinedTextField(
+        value = textFieldState.text ,
+        onValueChange = {
+            textFieldState.text = it
+        },
+        label = {
+            Text(text = "Email", style = MaterialTheme.typography.bodyMedium)
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .onFocusChanged {
+                textFieldState.onFocusChange(it.isFocused)
+                if(!it.isFocused){
+                    textFieldState.enableShowErrors()
+                }
+            },
+        textStyle = MaterialTheme.typography.bodyMedium,
+        isError = textFieldState.showErrors(),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = imeAction,
+            keyboardType = KeyboardType.Email
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = { onImeAction() }
+        ),
+        singleLine = true
+    )
 }
 
 @Composable
