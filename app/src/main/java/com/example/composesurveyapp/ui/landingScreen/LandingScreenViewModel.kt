@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 public class LandingViewModel(val repository:UserRepo):ViewModel(){
 
 
-    public fun signInAsGuest(
+    fun signInAsGuest(
         signInAsGuestDone:()->Unit
     ){
         repository.signInAsGuest()

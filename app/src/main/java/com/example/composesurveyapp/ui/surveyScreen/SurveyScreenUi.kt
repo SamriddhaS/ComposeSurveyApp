@@ -1,6 +1,7 @@
 package com.example.composesurveyapp.ui.surveyScreen
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,9 +32,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composesurveyapp.ui.landingScreen.LandingScreenDesign
 import com.example.composesurveyapp.ui.theme.ComposeSurveyAppTheme
 import com.example.composesurveyapp.ui.theme.stronglyDeemphasizedAlpha
@@ -44,6 +47,27 @@ fun SurveyScreenRoute(
     onSurveyComplete: () -> Unit,
     onBackPressed: () -> Unit
 ) {
+
+    val viewModel: SurveyViewModel = viewModel(factory = SurveyViewModelFactory())
+
+    val surveyScreenData = viewModel.surveyScreenData ?: return
+
+    BackHandler {
+        if (!viewModel.onBackPressed()){
+            onBackPressed()
+        }
+    }
+
+    SurveyQuestionScreen(
+        surveyData = surveyScreenData,
+        isNextEnable = viewModel.isNextEnabled,
+        onClosePressed = { onBackPressed() },
+        onPreviousPressed = { viewModel.onPreviousPressed() },
+        onNextPressed = { viewModel.onNextPressed() },
+        onDonePressed = { onSurveyComplete() },
+    ){
+
+    }
 
 
 }
@@ -149,7 +173,6 @@ fun TopAppBarTitle(
 
 @Composable
 fun SurveyBottomBar(
-    modifier: Modifier = Modifier,
     shouldShowPreviousButton:Boolean,
     shouldEnableNextButton:Boolean,
     shouldShowDoneButton:Boolean,
@@ -192,7 +215,7 @@ fun SurveyBottomBar(
                 }
             }else{
                 OutlinedButton(
-                    onClick = onDonePressed,
+                    onClick = onNextPressed,
                     modifier = Modifier
                         .weight(1f)
                         .height(48.dp),

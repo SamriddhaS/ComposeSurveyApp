@@ -154,7 +154,7 @@ fun LandingScreenBottomSection(
             modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)
         )
 
-        OutlinedButton(onClick = onSubmit,
+        OutlinedButton(onClick = onSignInAsGuest,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 12.dp, start = 8.dp, end = 8.dp)
