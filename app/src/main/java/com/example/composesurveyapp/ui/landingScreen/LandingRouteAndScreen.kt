@@ -1,18 +1,24 @@
 package com.example.composesurveyapp.ui.landingScreen
 
 import android.content.res.Configuration
+import android.widget.Space
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composesurveyapp.R
 import com.example.composesurveyapp.ui.theme.ComposeSurveyAppTheme
 import com.example.composesurveyapp.ui.theme.stronglyDeemphasizedAlpha
@@ -42,12 +49,18 @@ import com.example.composesurveyapp.util.supportWideScreen
 @Composable
 fun LandingScreenRoute(
     onNavigateSignIn:(email:String) -> Unit,
-    onSignAsGuest:() -> Unit
+    onNavigateSignAsGuest:() -> Unit
 ) {
+
+    val welcomeViewModel:LandingViewModel = viewModel(factory = WelcomeViewModelFactory())
 
     LandingScreenDesign(
         onSignIn = {  },
-        onSignInAsGuest = { }
+        onSignInAsGuest = {
+            welcomeViewModel.signInAsGuest {
+                onNavigateSignAsGuest()
+            }
+        }
     )
 }
 
@@ -124,6 +137,34 @@ fun LandingScreenBottomSection(
 
         Email(emailState, imeAction = ImeAction.Done, onImeAction = onSubmit)
 
+        Button(onClick = onSubmit,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp, start = 8.dp, end = 8.dp)
+            )
+        {
+            Text(text = "Continue",style = MaterialTheme.typography.titleSmall)
+        }
+
+        Text(
+            text = "Or",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = stronglyDeemphasizedAlpha),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)
+        )
+
+        OutlinedButton(onClick = onSubmit,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp, start = 8.dp, end = 8.dp)
+        )
+        {
+            Text(
+                text = "Sign in as guest",
+                style = MaterialTheme.typography.titleSmall
+            )
+        }
 
 
     }
@@ -150,7 +191,7 @@ fun Email(
             .fillMaxWidth()
             .onFocusChanged {
                 textFieldState.onFocusChange(it.isFocused)
-                if(!it.isFocused){
+                if (!it.isFocused) {
                     textFieldState.enableShowErrors()
                 }
             },
@@ -165,6 +206,19 @@ fun Email(
         ),
         singleLine = true
     )
+    
+    textFieldState.getError()?.let {
+        TextFieldError(it)
+    }
+
+}
+
+@Composable
+fun TextFieldError(message:String) {
+    Row(Modifier.fillMaxWidth()) {
+        Spacer(modifier = Modifier.width(18.dp))
+        Text(text = message,Modifier.fillMaxWidth(), color = MaterialTheme.colorScheme.error)
+    }
 }
 
 @Composable
