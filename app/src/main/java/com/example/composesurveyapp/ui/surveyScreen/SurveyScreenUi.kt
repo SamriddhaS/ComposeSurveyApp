@@ -2,7 +2,12 @@ package com.example.composesurveyapp.ui.surveyScreen
 
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -32,15 +37,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.composesurveyapp.ui.landingScreen.LandingScreenDesign
 import com.example.composesurveyapp.ui.theme.ComposeSurveyAppTheme
 import com.example.composesurveyapp.ui.theme.stronglyDeemphasizedAlpha
 import com.example.composesurveyapp.util.supportWideScreen
+
+private const val CONTENT_ANIMATION_DURATION = 300
 
 @Composable
 fun SurveyScreenRoute(
@@ -65,10 +70,40 @@ fun SurveyScreenRoute(
         onPreviousPressed = { viewModel.onPreviousPressed() },
         onNextPressed = { viewModel.onNextPressed() },
         onDonePressed = { onSurveyComplete() },
-    ){
+    ){ paddingValue ->
+
+        val modifier = Modifier.padding(paddingValue)
+
+        AnimatedContent(
+            targetState = surveyScreenData,
+            transitionSpec = {
+                val animationSpec: TweenSpec<IntOffset> = tween(CONTENT_ANIMATION_DURATION)
+                val direction = getTransitionDirection(
+                    initialIndex = initialState.questionIndex,
+                    targetIndex = targetState.questionIndex
+                )
+                slideIntoContainer(
+                    towards = direction,
+                    animationSpec = animationSpec,
+                ) togetherWith slideOutOfContainer(
+                    towards = direction,
+                    animationSpec = animationSpec
+                )
+            },
+            label = "surveyScreenDataAnimation"
+            ) {targetState ->
+
+            when(targetState.surveyQuestion){
+                SurveyQuestion.FREE_TIME -> TODO()
+                SurveyQuestion.SUPERHERO -> TODO()
+                SurveyQuestion.LAST_TAKEAWAY -> TODO()
+                SurveyQuestion.FEELING_ABOUT_SELFIES -> TODO()
+                SurveyQuestion.TAKE_SELFIE -> TODO()
+            }
+        }
+
 
     }
-
 
 }
 
@@ -225,6 +260,17 @@ fun SurveyBottomBar(
                 }
             }
         }
+    }
+}
+
+private fun getTransitionDirection(
+    initialIndex: Int,
+    targetIndex: Int
+): AnimatedContentTransitionScope.SlideDirection {
+    return if (targetIndex > initialIndex) {
+        AnimatedContentTransitionScope.SlideDirection.Left
+    } else {
+        AnimatedContentTransitionScope.SlideDirection.Right
     }
 }
 
