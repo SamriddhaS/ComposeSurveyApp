@@ -45,7 +45,7 @@ import com.example.composesurveyapp.ui.theme.ComposeSurveyAppTheme
 import com.example.composesurveyapp.ui.theme.stronglyDeemphasizedAlpha
 import com.example.composesurveyapp.util.supportWideScreen
 
-private const val CONTENT_ANIMATION_DURATION = 300
+private const val CONTENT_ANIMATION_DURATION = 500
 
 @Composable
 fun SurveyScreenRoute(
@@ -120,11 +120,13 @@ fun SurveyQuestionScreen(
 
     Surface(Modifier.supportWideScreen()) {
         Scaffold(
-            topBar = { SurveyTopAppBar(
-                currentQuestionIndex = surveyData?.questionIndex?:0,
-                totalQuestionCount = surveyData?.questionCount?:10,
-                onClosePressed = onClosePressed
-            ) },
+            topBar = {
+                SurveyTopAppBar(
+                    currentQuestionIndex = surveyData?.questionIndex?:0,
+                    totalQuestionCount = surveyData?.questionCount?:10,
+                    onClosePressed = onClosePressed
+                )
+                     },
             content = content,
             bottomBar = {
                 SurveyBottomBar(
