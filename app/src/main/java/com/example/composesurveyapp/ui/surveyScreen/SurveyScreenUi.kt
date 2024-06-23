@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -94,11 +95,25 @@ fun SurveyScreenRoute(
             ) {targetState ->
 
             when(targetState.surveyQuestion){
-                SurveyQuestion.FREE_TIME -> TODO()
-                SurveyQuestion.SUPERHERO -> TODO()
-                SurveyQuestion.LAST_TAKEAWAY -> TODO()
-                SurveyQuestion.FEELING_ABOUT_SELFIES -> TODO()
-                SurveyQuestion.TAKE_SELFIE -> TODO()
+                SurveyQuestion.FAV_ANIME -> {
+                    QuestionFavAnimeName(
+                        selectedAnswers = viewModel.freeTimeResponse,
+                        onClickedAnAnswer = { selected,answer -> viewModel.onFreeTimeResponse(selected, answer) },
+                        modifier = modifier
+                    )
+                }
+                SurveyQuestion.SUPERHERO -> {
+
+                }
+                SurveyQuestion.LAST_TAKEAWAY -> {
+
+                }
+                SurveyQuestion.FEELING_ABOUT_SELFIES -> {
+
+                }
+                SurveyQuestion.TAKE_SELFIE -> {
+                    
+                }
             }
         }
 
@@ -242,7 +257,7 @@ fun SurveyBottomBar(
             }
 
             if(shouldShowDoneButton){
-                OutlinedButton(
+                Button(
                     onClick = onDonePressed,
                     modifier = Modifier
                         .weight(1f)
@@ -251,7 +266,7 @@ fun SurveyBottomBar(
                     Text(text = "Done")
                 }
             }else{
-                OutlinedButton(
+                Button(
                     onClick = onNextPressed,
                     modifier = Modifier
                         .weight(1f)

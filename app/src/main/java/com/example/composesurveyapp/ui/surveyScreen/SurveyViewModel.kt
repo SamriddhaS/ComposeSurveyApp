@@ -11,7 +11,7 @@ import com.example.composesurveyapp.ui.surveyScreen.questions.Superhero
 class SurveyViewModel:ViewModel() {
 
     private val questionOrder: List<SurveyQuestion> = listOf(
-        SurveyQuestion.FREE_TIME,
+        SurveyQuestion.FAV_ANIME,
         SurveyQuestion.SUPERHERO,
         SurveyQuestion.LAST_TAKEAWAY,
         SurveyQuestion.FEELING_ABOUT_SELFIES,
@@ -22,9 +22,17 @@ class SurveyViewModel:ViewModel() {
 
     // ----- Responses exposed as State -----
 
-    private val _freeTimeResponse = mutableStateListOf<Int>()
-    val freeTimeResponse: List<Int>
+    private val _freeTimeResponse = mutableStateListOf<String>()
+    val freeTimeResponse: List<String>
         get() = _freeTimeResponse
+    fun onFreeTimeResponse(selected: Boolean, answer: String) {
+        if (selected) {
+            _freeTimeResponse.add(answer)
+        } else {
+            _freeTimeResponse.remove(answer)
+        }
+        _isNextEnabled.value = getIsNextEnabled()
+    }
 
     private val _superheroResponse = mutableStateOf<Superhero?>(null)
     val superheroResponse: Superhero?
@@ -90,7 +98,7 @@ class SurveyViewModel:ViewModel() {
 
     private fun getIsNextEnabled(): Boolean {
         return when (questionOrder[questionIndex]) {
-            SurveyQuestion.FREE_TIME -> _freeTimeResponse.isNotEmpty()
+            SurveyQuestion.FAV_ANIME -> _freeTimeResponse.isNotEmpty()
             SurveyQuestion.SUPERHERO -> _superheroResponse.value != null
             SurveyQuestion.LAST_TAKEAWAY -> _takeawayResponse.value != null
             SurveyQuestion.FEELING_ABOUT_SELFIES -> _feelingAboutSelfiesResponse.value != null
@@ -112,7 +120,7 @@ class SurveyViewModelFactory() : ViewModelProvider.Factory {
 }
 
 enum class SurveyQuestion {
-    FREE_TIME,
+    FAV_ANIME,
     SUPERHERO,
     LAST_TAKEAWAY,
     FEELING_ABOUT_SELFIES,
