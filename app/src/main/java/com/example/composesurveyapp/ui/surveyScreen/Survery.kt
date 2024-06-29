@@ -30,3 +30,8 @@ fun QuestionFavAnimeName(
     )
 
 }
+
+@Composable
+fun SecondQuestion(modifier: Modifier = Modifier) {
+
+}
