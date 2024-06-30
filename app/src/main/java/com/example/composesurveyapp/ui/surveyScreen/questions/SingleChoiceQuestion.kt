@@ -29,16 +29,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.composesurveyapp.R
 import com.example.composesurveyapp.ui.surveyScreen.QuestionWrapperWithTitleAndDescription
 
-data class Superhero(@StringRes val stringResourceId: Int, @DrawableRes val imageResourceId: Int)
+data class Superhero(val name: String, @DrawableRes val imageResourceId: Int)
 
 @Composable
 fun SingleChoiceQuestion(
     questionTitle:String,
     questionDescription:String,
     totalAnswers:List<Superhero>,
-    selectedAnswer:Superhero,
+    selectedAnswer:Superhero?,
     onOptionSelected: (answer: Superhero) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -51,7 +52,13 @@ fun SingleChoiceQuestion(
 
         totalAnswers.forEach {
             val selected = it == selectedAnswer
-
+            RadioButtonWithImageItem(
+                modifier = Modifier.padding(vertical = 8.dp),
+                text = it.name,
+                imageResourceId = it.imageResourceId,
+                onOptionSelected = { onOptionSelected(it) },
+                selected = selected
+            )
         }
 
     }
@@ -80,7 +87,7 @@ fun RadioButtonWithImageItem(
                 MaterialTheme.colorScheme.outline
             }
         ),
-        modifier = Modifier
+        modifier = modifier
             .clip(MaterialTheme.shapes.small)
             .selectable(
                 selected,
@@ -119,20 +126,21 @@ fun RadioButtonWithImageItem(
 
 @Preview
 @Composable
-fun SingleChoiceQuestionPreview() {
-//    val possibleAnswers = listOf(
-//        Superhero(),
-//        Superhero(),
-//        Superhero(),
-//    )
+private fun SingleChoiceQuestionPreview() {
+    val possibleAnswers = listOf(
+        Superhero("Saitama", R.drawable.saitama),
+        Superhero("Naruto", R.drawable.naruto),
+        Superhero("Minato", R.drawable.minato),
+        Superhero("Levai", R.drawable.levai)
+    )
 
     var selectedAnswer by remember { mutableStateOf<Superhero?>(null) }
-//
-//    SingleChoiceQuestion(
-//        questionTitle = "Select single choice question...",
-//        questionDescription = "You can choose only one type of question.",
-//        totalAnswers = possibleAnswers,
-//        selectedAnswer = selectedAnswer,
-//        onOptionSelected = { selectedAnswer = it },
-//    )
+
+    SingleChoiceQuestion(
+        questionTitle = "Select single choice question...",
+        questionDescription = "You can choose only one type of question.",
+        totalAnswers = possibleAnswers,
+        selectedAnswer = selectedAnswer,
+        onOptionSelected = { selectedAnswer = it },
+    )
 }

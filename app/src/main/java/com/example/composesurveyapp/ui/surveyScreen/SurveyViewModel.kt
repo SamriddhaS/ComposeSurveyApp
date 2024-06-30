@@ -38,6 +38,11 @@ class SurveyViewModel:ViewModel() {
     val superheroResponse: Superhero?
         get() = _superheroResponse.value
 
+    fun onSecondQuestionResponse(favAnime:Superhero) {
+        _superheroResponse.value = favAnime
+        _isNextEnabled.value = getIsNextEnabled()
+    }
+
     private val _takeawayResponse = mutableStateOf<Long?>(null)
     val takeawayResponse: Long?
         get() = _takeawayResponse.value
