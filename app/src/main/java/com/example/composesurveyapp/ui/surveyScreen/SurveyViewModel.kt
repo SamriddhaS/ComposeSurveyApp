@@ -1,12 +1,11 @@
 package com.example.composesurveyapp.ui.surveyScreen
 
 import android.net.Uri
-import android.view.View
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.composesurveyapp.ui.surveyScreen.questions.Superhero
+import com.example.composesurveyapp.ui.surveyScreen.model.FavAnime
 
 class SurveyViewModel:ViewModel() {
 
@@ -34,12 +33,12 @@ class SurveyViewModel:ViewModel() {
         _isNextEnabled.value = getIsNextEnabled()
     }
 
-    private val _superheroResponse = mutableStateOf<Superhero?>(null)
-    val superheroResponse: Superhero?
-        get() = _superheroResponse.value
+    private val _favAnimeResponse = mutableStateOf<FavAnime?>(null)
+    val favAnimeResponse: FavAnime?
+        get() = _favAnimeResponse.value
 
-    fun onSecondQuestionResponse(favAnime:Superhero) {
-        _superheroResponse.value = favAnime
+    fun onSecondQuestionResponse(favAnime:FavAnime) {
+        _favAnimeResponse.value = favAnime
         _isNextEnabled.value = getIsNextEnabled()
     }
 
@@ -104,7 +103,7 @@ class SurveyViewModel:ViewModel() {
     private fun getIsNextEnabled(): Boolean {
         return when (questionOrder[questionIndex]) {
             SurveyQuestion.FAV_ANIME -> _freeTimeResponse.isNotEmpty()
-            SurveyQuestion.SUPERHERO -> _superheroResponse.value != null
+            SurveyQuestion.SUPERHERO -> _favAnimeResponse.value != null
             SurveyQuestion.LAST_TAKEAWAY -> _takeawayResponse.value != null
             SurveyQuestion.FEELING_ABOUT_SELFIES -> _feelingAboutSelfiesResponse.value != null
             SurveyQuestion.TAKE_SELFIE -> _selfieUri.value != null

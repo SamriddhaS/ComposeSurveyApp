@@ -3,9 +3,9 @@ package com.example.composesurveyapp.ui.surveyScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.composesurveyapp.R
+import com.example.composesurveyapp.ui.surveyScreen.model.FavAnime
 import com.example.composesurveyapp.ui.surveyScreen.questions.MultipleChoiceQuestions
 import com.example.composesurveyapp.ui.surveyScreen.questions.SingleChoiceQuestion
-import com.example.composesurveyapp.ui.surveyScreen.questions.Superhero
 
 
 @Composable
@@ -36,8 +36,8 @@ fun QuestionFavAnimeName(
 
 @Composable
 fun SecondQuestion(
-    selectedAnswer: Superhero?,
-    onOptionSelected: (answer: Superhero) -> Unit,
+    selectedAnswer: FavAnime?,
+    onOptionSelected: (answer: FavAnime) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -45,11 +45,11 @@ fun SecondQuestion(
         "Select your favourite anime character.",
         "You can select only one of them",
         totalAnswers = listOf(
-            Superhero("Saitama", R.drawable.saitama),
-            Superhero("Naruto", R.drawable.naruto),
-            Superhero("Minato", R.drawable.minato),
-            Superhero("Levai", R.drawable.levai),
-            Superhero("Goku", R.drawable.goku),
+            FavAnime("Saitama", R.drawable.saitama),
+            FavAnime("Naruto", R.drawable.naruto),
+            FavAnime("Minato", R.drawable.minato),
+            FavAnime("Levai", R.drawable.levai),
+            FavAnime("Goku", R.drawable.goku),
         ),
         selectedAnswer = selectedAnswer,
         onOptionSelected = onOptionSelected,

@@ -104,7 +104,7 @@ fun SurveyScreenRoute(
                 }
                 SurveyQuestion.SUPERHERO -> {
                     SecondQuestion(
-                        selectedAnswer = viewModel.superheroResponse,
+                        selectedAnswer = viewModel.favAnimeResponse,
                         onOptionSelected = { favAnime -> viewModel.onSecondQuestionResponse(favAnime) },
                         modifier = modifier
                     )

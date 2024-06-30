@@ -1,7 +1,6 @@
 package com.example.composesurveyapp.ui.surveyScreen.questions
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -31,16 +30,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composesurveyapp.R
 import com.example.composesurveyapp.ui.surveyScreen.QuestionWrapperWithTitleAndDescription
-
-data class Superhero(val name: String, @DrawableRes val imageResourceId: Int)
+import com.example.composesurveyapp.ui.surveyScreen.model.FavAnime
 
 @Composable
 fun SingleChoiceQuestion(
     questionTitle:String,
     questionDescription:String,
-    totalAnswers:List<Superhero>,
-    selectedAnswer:Superhero?,
-    onOptionSelected: (answer: Superhero) -> Unit,
+    totalAnswers:List<FavAnime>,
+    selectedAnswer:FavAnime?,
+    onOptionSelected: (answer: FavAnime) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -128,13 +126,13 @@ fun RadioButtonWithImageItem(
 @Composable
 private fun SingleChoiceQuestionPreview() {
     val possibleAnswers = listOf(
-        Superhero("Saitama", R.drawable.saitama),
-        Superhero("Naruto", R.drawable.naruto),
-        Superhero("Minato", R.drawable.minato),
-        Superhero("Levai", R.drawable.levai)
+        FavAnime("Saitama", R.drawable.saitama),
+        FavAnime("Naruto", R.drawable.naruto),
+        FavAnime("Minato", R.drawable.minato),
+        FavAnime("Levai", R.drawable.levai)
     )
 
-    var selectedAnswer by remember { mutableStateOf<Superhero?>(null) }
+    var selectedAnswer by remember { mutableStateOf<FavAnime?>(null) }
 
     SingleChoiceQuestion(
         questionTitle = "Select single choice question...",
