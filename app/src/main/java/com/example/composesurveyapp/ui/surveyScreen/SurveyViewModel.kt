@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.composesurveyapp.ui.surveyScreen.model.FavAnime
 
+
+const val simpleDateFormatPattern = "EEE, MMM d"
+
 class SurveyViewModel:ViewModel() {
 
     private val questionOrder: List<SurveyQuestion> = listOf(
@@ -45,6 +48,11 @@ class SurveyViewModel:ViewModel() {
     private val _takeawayResponse = mutableStateOf<Long?>(null)
     val takeawayResponse: Long?
         get() = _takeawayResponse.value
+
+    fun onLastWatchedEpisodeDateResponse(timestamp: Long) {
+        _takeawayResponse.value = timestamp
+        _isNextEnabled.value = getIsNextEnabled()
+    }
 
     private val _feelingAboutSelfiesResponse = mutableStateOf<Float?>(null)
     val feelingAboutSelfiesResponse: Float?

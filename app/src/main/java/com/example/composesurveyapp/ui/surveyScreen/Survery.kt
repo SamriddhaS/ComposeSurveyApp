@@ -57,3 +57,17 @@ fun SecondQuestion(
     )
 
 }
+@Composable
+fun ThirdQuestion(
+    selectedDate:Long?,
+    onClickedPickDate:()->Unit,
+    modifier: Modifier,
+){
+    QuestionWithDateUi(
+        title = "When was the last time you saw your fav anime?",
+        description = "Select a date",
+        onClickedPickDate = onClickedPickDate,
+        dateInMilli = selectedDate,
+        modifier = modifier
+    )
+}

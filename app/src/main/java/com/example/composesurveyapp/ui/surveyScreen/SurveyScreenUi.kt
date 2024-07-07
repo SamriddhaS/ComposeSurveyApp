@@ -1,7 +1,11 @@
 package com.example.composesurveyapp.ui.surveyScreen
 
+import android.app.FragmentManager
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.TweenSpec
@@ -38,13 +42,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composesurveyapp.ui.theme.ComposeSurveyAppTheme
 import com.example.composesurveyapp.ui.theme.stronglyDeemphasizedAlpha
 import com.example.composesurveyapp.util.supportWideScreen
+import com.google.android.material.datepicker.MaterialDatePicker
 
 private const val CONTENT_ANIMATION_DURATION = 500
 
@@ -110,7 +117,22 @@ fun SurveyScreenRoute(
                     )
                 }
                 SurveyQuestion.LAST_TAKEAWAY -> {
+                    val supportFragmentManager =
+                        LocalContext.current.findActivity().supportFragmentManager
 
+                    ThirdQuestion(
+                        selectedDate = viewModel.takeawayResponse,
+                        onClickedPickDate = {
+                            showDatePicker(
+                                currentSelected = viewModel.takeawayResponse,
+                                supportFragmentManager =supportFragmentManager,
+                                onDateSelected = {
+                                    viewModel.onLastWatchedEpisodeDateResponse(it)
+                                }
+                            )
+                        },
+                        modifier = modifier
+                    )
                 }
                 SurveyQuestion.FEELING_ABOUT_SELFIES -> {
 
@@ -295,6 +317,24 @@ private fun getTransitionDirection(
     }
 }
 
+fun showDatePicker(
+    currentSelected:Long?,
+    supportFragmentManager: androidx.fragment.app.FragmentManager,
+    onDateSelected:(Long)->Unit
+) {
+
+    val datePicker = MaterialDatePicker.Builder.datePicker()
+        .setSelection(currentSelected)
+        .build()
+
+    datePicker.show(supportFragmentManager,datePicker.toString())
+    datePicker.addOnPositiveButtonClickListener {
+        datePicker.selection?.let {
+            onDateSelected(it)
+        }
+    }
+}
+
 @Preview(name = "Welcome light theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(name = "Welcome dark theme", uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
@@ -311,3 +351,10 @@ fun WelcomeScreenPreview() {
         }
     }
 }
+
+private tailrec fun Context.findActivity(): AppCompatActivity =
+    when (this) {
+        is AppCompatActivity -> this
+        is ContextWrapper -> this.baseContext.findActivity()
+        else -> throw IllegalArgumentException("Could not find activity!")
+    }
