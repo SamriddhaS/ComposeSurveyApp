@@ -54,9 +54,14 @@ class SurveyViewModel:ViewModel() {
         _isNextEnabled.value = getIsNextEnabled()
     }
 
-    private val _feelingAboutSelfiesResponse = mutableStateOf<Float?>(null)
-    val feelingAboutSelfiesResponse: Float?
-        get() = _feelingAboutSelfiesResponse.value
+    private val _lastWatchedAnimeRating = mutableStateOf<Float?>(null)
+    val lastWatchedAnimeRating: Float?
+        get() = _lastWatchedAnimeRating.value
+
+    fun onLastWatchedAnimeRatingResponse(rating: Float) {
+        _lastWatchedAnimeRating.value = rating
+        _isNextEnabled.value = getIsNextEnabled()
+    }
 
     private val _selfieUri = mutableStateOf<Uri?>(null)
     val selfieUri
@@ -113,7 +118,7 @@ class SurveyViewModel:ViewModel() {
             SurveyQuestion.FAV_ANIME -> _freeTimeResponse.isNotEmpty()
             SurveyQuestion.SUPERHERO -> _favAnimeResponse.value != null
             SurveyQuestion.LAST_TAKEAWAY -> _takeawayResponse.value != null
-            SurveyQuestion.FEELING_ABOUT_SELFIES -> _feelingAboutSelfiesResponse.value != null
+            SurveyQuestion.FEELING_ABOUT_SELFIES -> _lastWatchedAnimeRating.value != null
             SurveyQuestion.TAKE_SELFIE -> _selfieUri.value != null
         }
     }

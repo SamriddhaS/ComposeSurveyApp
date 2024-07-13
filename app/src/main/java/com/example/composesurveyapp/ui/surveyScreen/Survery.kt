@@ -71,3 +71,24 @@ fun ThirdQuestion(
         modifier = modifier
     )
 }
+
+@Composable
+fun FourthQuestion(
+    currentPos:Float?,
+    onSliderPosChanged:(Float)->Unit,
+    modifier: Modifier = Modifier
+) {
+
+    SliderQuestion(
+        question = "How do you rate the last anime you watched?",
+        questionDesc = "Select a rating using the slider",
+        valueRange = 1F..10F,
+        steps = 1,
+        startingText = "Poor",
+        middleText = "Fair",
+        endText = "Excellent",
+        onSliderPositionChanged = onSliderPosChanged,
+        sliderPosition = currentPos,
+        modifier = modifier
+    )
+}

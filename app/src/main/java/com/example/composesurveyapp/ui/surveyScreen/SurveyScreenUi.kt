@@ -135,7 +135,11 @@ fun SurveyScreenRoute(
                     )
                 }
                 SurveyQuestion.FEELING_ABOUT_SELFIES -> {
-
+                    FourthQuestion(
+                        currentPos = viewModel.lastWatchedAnimeRating,
+                        onSliderPosChanged = viewModel::onLastWatchedAnimeRatingResponse,
+                        modifier = modifier
+                    )
                 }
                 SurveyQuestion.TAKE_SELFIE -> {
                     
