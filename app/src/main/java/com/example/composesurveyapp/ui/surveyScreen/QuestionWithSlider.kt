@@ -72,7 +72,6 @@ fun SliderQuestion(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-
             )
             Text(
                 text = middleText,
@@ -89,7 +88,6 @@ fun SliderQuestion(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-
             )
         }
 
@@ -111,7 +109,7 @@ fun PreviewSliderQuestion(modifier: Modifier = Modifier) {
                 endText = "Outstanding",
                 sliderPosition = null,
                 onSliderPositionChanged = {},
-                steps = 1
+                steps = 10
             )
         }
     }

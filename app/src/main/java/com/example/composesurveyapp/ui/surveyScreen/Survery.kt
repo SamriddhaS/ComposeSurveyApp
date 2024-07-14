@@ -1,5 +1,6 @@
 package com.example.composesurveyapp.ui.surveyScreen
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.composesurveyapp.R
@@ -83,12 +84,28 @@ fun FourthQuestion(
         question = "How do you rate the last anime you watched?",
         questionDesc = "Select a rating using the slider",
         valueRange = 1F..10F,
-        steps = 1,
+        steps = 10,
         startingText = "Poor",
         middleText = "Fair",
         endText = "Excellent",
         onSliderPositionChanged = onSliderPosChanged,
         sliderPosition = currentPos,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun FifthQuestion(
+    imageUri: Uri?,
+    getNewImageUri:Uri,
+    onPhotoTaken: (Uri) -> Unit,
+    modifier: Modifier = Modifier) {
+    SelfiQuestion(
+        question = "Take Selfi with your fav anime character.",
+        questionDes = "Press Button to Capture.",
+        photoUri = imageUri,
+        newPhotoUri = getNewImageUri,
+        onPhotoTaken = onPhotoTaken,
         modifier = modifier
     )
 }

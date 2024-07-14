@@ -6,11 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.composesurveyapp.ui.surveyScreen.model.FavAnime
+import com.example.composesurveyapp.util.PhotoUriManager
 
 
 const val simpleDateFormatPattern = "EEE, MMM d"
 
-class SurveyViewModel:ViewModel() {
+class SurveyViewModel(
+    private val photoUriManager: PhotoUriManager
+):ViewModel() {
 
     private val questionOrder: List<SurveyQuestion> = listOf(
         SurveyQuestion.FAV_ANIME,
@@ -66,6 +69,13 @@ class SurveyViewModel:ViewModel() {
     private val _selfieUri = mutableStateOf<Uri?>(null)
     val selfieUri
         get() = _selfieUri.value
+
+    fun onSelfieResponse(uri: Uri) {
+        _selfieUri.value = uri
+        _isNextEnabled.value = getIsNextEnabled()
+    }
+
+    fun getNewSelfieUri() = photoUriManager.buildNewUri()
 
 
     fun onBackPressed(): Boolean {
@@ -126,11 +136,13 @@ class SurveyViewModel:ViewModel() {
 
 }
 
-class SurveyViewModelFactory() : ViewModelProvider.Factory {
+class SurveyViewModelFactory(
+    private val photoUriManager: PhotoUriManager
+) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SurveyViewModel::class.java)) {
-            return SurveyViewModel() as T
+            return SurveyViewModel(photoUriManager) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

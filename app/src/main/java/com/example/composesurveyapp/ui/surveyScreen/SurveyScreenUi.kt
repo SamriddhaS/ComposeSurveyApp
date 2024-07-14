@@ -50,6 +50,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composesurveyapp.ui.theme.ComposeSurveyAppTheme
 import com.example.composesurveyapp.ui.theme.stronglyDeemphasizedAlpha
+import com.example.composesurveyapp.util.PhotoUriManager
 import com.example.composesurveyapp.util.supportWideScreen
 import com.google.android.material.datepicker.MaterialDatePicker
 
@@ -61,7 +62,8 @@ fun SurveyScreenRoute(
     onBackPressed: () -> Unit
 ) {
 
-    val viewModel: SurveyViewModel = viewModel(factory = SurveyViewModelFactory())
+    val context = LocalContext.current
+    val viewModel: SurveyViewModel = viewModel(factory = SurveyViewModelFactory(PhotoUriManager(context)))
 
     val surveyScreenData = viewModel.surveyScreenData ?: return
 
@@ -142,7 +144,12 @@ fun SurveyScreenRoute(
                     )
                 }
                 SurveyQuestion.TAKE_SELFIE -> {
-                    
+                    FifthQuestion(
+                        imageUri = viewModel.selfieUri,
+                        getNewImageUri = viewModel.getNewSelfieUri(),
+                        onPhotoTaken = viewModel::onSelfieResponse,
+                        modifier = modifier
+                    )
                 }
             }
         }
