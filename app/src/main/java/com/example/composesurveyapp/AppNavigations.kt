@@ -12,6 +12,7 @@ import com.example.composesurveyapp.Destinations.SIGN_IN_ROUTE
 import com.example.composesurveyapp.Destinations.SURVEY_RESULT_ROUTE
 import com.example.composesurveyapp.Destinations.SURVEY_SCREEN_ROUTE
 import com.example.composesurveyapp.ui.landingScreen.LandingScreenRoute
+import com.example.composesurveyapp.ui.surveyResult.SurveyResultRoute
 import com.example.composesurveyapp.ui.surveyScreen.SurveyScreenRoute
 
 object Destinations {
@@ -49,7 +50,10 @@ fun AppNavHost(
             )
         }
         composable(SURVEY_RESULT_ROUTE){
-
+            SurveyResultRoute(
+                onTakeSurveyAgainClicked = { navController.popBackStack(LANDING_PAGE_ROUTE,true) },
+                onShareWithOthers = {}
+            )
         }
     }
 }

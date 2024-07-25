@@ -107,6 +107,11 @@ class SurveyViewModel(
         changeQuestion(questionIndex + 1)
     }
 
+    fun onDonePressed(doAfterSurveyComplete:()->Unit){
+        // We can validate to see if all the questions are answered...
+        doAfterSurveyComplete()
+    }
+
     private fun changeQuestion(newQuestionIndex:Int){
         questionIndex = newQuestionIndex
         _isNextEnabled.value = getIsNextEnabled()

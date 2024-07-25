@@ -79,7 +79,7 @@ fun SurveyScreenRoute(
         onClosePressed = { onBackPressed() },
         onPreviousPressed = { viewModel.onPreviousPressed() },
         onNextPressed = { viewModel.onNextPressed() },
-        onDonePressed = { onSurveyComplete() },
+        onDonePressed = { viewModel.onDonePressed(onSurveyComplete) },
     ){ paddingValue ->
 
         val modifier = Modifier.padding(paddingValue)
