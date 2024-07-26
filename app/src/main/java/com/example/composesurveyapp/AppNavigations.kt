@@ -51,7 +51,7 @@ fun AppNavHost(
         }
         composable(SURVEY_RESULT_ROUTE){
             SurveyResultRoute(
-                onTakeSurveyAgainClicked = { navController.popBackStack(LANDING_PAGE_ROUTE,true) },
+                onTakeSurveyAgainClicked = { navController.popBackStack(LANDING_PAGE_ROUTE,false) },
                 onShareWithOthers = {}
             )
         }
